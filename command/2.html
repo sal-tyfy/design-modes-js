@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <p id="number">0</p>
+    <button id="addBtn">+</button>
+    <button id="undo">undo</button>
+    <button id="redo">redo</button>
+    <script>
+      const number = document.getElementById("number");
+      const worker = {
+        history: [],
+        index: -1,
+        add() {
+          const oldVal = isNaN(number.innerHTML)
+            ? 0
+            : parseInt(number.innerHTML);
+          const newVal = oldVal + 1;
+          worker.history.push(newVal);
+          worker.index = worker.history.length - 1;
+          number.innerHTML = newVal;
+        },
+        undo() {
+          if (worker.index > 0) {
+            worker.index--;
+            number.innerHTML = worker.history[worker.index];
+          }
+        },
+        redo() {
+          if (worker.index < worker.history.length - 1) {
+            worker.index++;
+            number.innerHTML = worker.history[worker.index];
+          }
+        },
+      };
+      class AddCommand {
+        constructor(receiver) {
+          this.receiver = receiver;
+        }
+        execute() {
+          this.receiver.add();
+        }
+      }
+      class UndoCommand {
+        constructor(receiver) {
+          this.receiver = receiver;
+        }
+        execute() {
+          this.receiver.undo();
+        }
+      }
+      class RedoCommand {
+        constructor(receiver) {
+          this.receiver = receiver;
+        }
+        execute() {
+          this.receiver.redo();
+        }
+      }
+      const addCommand = new AddCommand(worker);
+      const undoCommand = new UndoCommand(worker);
+      const redoCommand = new RedoCommand(worker);
+      document.getElementById("addBtn").addEventListener("click", () => {
+        addCommand.execute();
+      });
+      document.getElementById("undo").addEventListener("click", () => {
+        undoCommand.execute();
+      });
+      document.getElementById("redo").addEventListener("click", () => {
+        redoCommand.execute();
+      });
+    </script>
+  </body>
+</html>
