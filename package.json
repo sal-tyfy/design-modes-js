@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "commitizen": "^4.2.5",
+    "standard-version": "^9.5.0"
+  },
+  "name": "design-mode",
+  "version": "1.1.0",
+  "main": "index.js",
+  "devDependencies": {
+    "cz-conventional-changelog": "^3.3.0"
+  },
+  "scripts": {
+    "commit": "cz",
+    "release": "standard-version"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  }
+}
