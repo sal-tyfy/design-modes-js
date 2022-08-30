@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <ul id="todoApp"></ul>
+    <script>
+      const todoApp = document.getElementById("todoApp");
+      window.onload = function () {
+        fetch("/todos")
+          .then((res) => res.json())
+          .then(function (todos) {
+            todoApp.innerHTML = todos
+              .map(
+                (item) => `<li>
+                <input value="${item.id}" type="checkbox"  ${
+                  item.completed ? "checked" : ""
+                } / >
+                ${item.text}
+                </li>`
+              )
+              .join("");
+          });
+      };
+      function toggle(id) {
+        fetch(`/toggle?ids=${id}`)
+          .then((res) => res.json)
+          .then(function (result) {});
+      }
+      const lazyToggle = (function (id) {
+        const ids = [];
+        let timer;
+        return function (id) {
+          ids.push(id);
+          if (!timer) {
+            timer = setTimeout(function () {
+              toggle(ids.join(","));
+              clearTimeout(timer);
+              timer = null;
+            }, 2000);
+          }
+        };
+      })();
+      todoApp.addEventListener("click", function (e) {
+        const id = e.target.value;
+        lazyToggle(id);
+      });
+    </script>
+  </body>
+</html>

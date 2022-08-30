@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  </head>
+  <body>
+    <button id="clickMe">click</button>
+    <script>
+      //   document.getElementById("clickMe").addEventListener("click", function () {
+      //     setTimeout(
+      //       $.proxy(function () {
+      //         $(this).css("color", "red");
+      //       }, this),
+      //       3000
+      //     );
+      //   });
+      //   document.getElementById("clickMe").addEventListener("click", function () {
+      //     function setColor() {
+      //       $(this).css("color", "red");
+      //     }
+      //     setColor = setColor.bind(this);
+      //     setTimeout(setColor, 3000);
+      //   });
+      document.getElementById("clickMe").addEventListener("click", function () {
+        function setColor() {
+          $(this).css("color", "red");
+        }
+        function proxy(fn, context) {
+          return function () {
+            fn.apply(context, arguments);
+          };
+        }
+        setColor = proxy(setColor, this);
+        setTimeout(setColor, 3000);
+      });
+    </script>
+  </body>
+</html>

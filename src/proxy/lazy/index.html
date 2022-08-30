@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      ul,
+      li {
+        list-style: none;
+      }
+      ul {
+        position: absolute;
+        left: 20px;
+        top: 20px;
+      }
+      #bgimg {
+        width: 600px;
+        height: 400px;
+        margin: 100px auto;
+        background-color: greenyellow;
+        text-align: center;
+        overflow: hidden;
+      }
+      #bgimg img {
+        height: 100%;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body>
+    <ul id="menu">
+      <li data-src="/images/dragon.webp">图片1</li>
+      <li data-src="/images/shroom.webp">图片2</li>
+    </ul>
+    <div id="bgimg"></div>
+    <script>
+      const menu = document.getElementById("menu");
+      const bgImg = document.getElementById("bgimg");
+      const background = (function () {
+        const img = new Image();
+        bgImg.appendChild(img);
+        return {
+          setSrc(src) {
+            img.src = src + "?time=" + Date.now();
+          },
+        };
+      })();
+
+      const proxyBackground = (function () {
+        const img = new Image();
+        img.onload = () => {
+          background.setSrc(img.src);
+        };
+        return {
+          setSrc(src) {
+            background.setSrc("/loading.gif");
+            img.src = src;
+          },
+        };
+      })();
+      menu.addEventListener("click", (e) => {
+        const src = e.target.dataset.src;
+        proxyBackground.setSrc(src);
+      });
+    </script>
+  </body>
+</html>
