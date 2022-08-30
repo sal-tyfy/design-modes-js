@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <ul>
+      <li data-id="1">用户1</li>
+      <li data-id="2">用户2</li>
+    </ul>
+    <p id="content"></p>
+    <script>
+      const lis = document.querySelectorAll("li");
+      //   function getUserById() {
+      //     const id = this.dataset.id;
+      //     const xhr = new XMLHttpRequest();
+      //     xhr.open("GET", `/user/${id}`, true);
+      //     xhr.responseType = "json";
+      //     xhr.onreadystatechange = function () {
+      //       if (xhr.readyState === 4) {
+      //         const user = xhr.response;
+      //         document.getElementById("content").innerHTML = user.name;
+      //       }
+      //     };
+      //     xhr.send();
+      //   }
+      function getUserById(id, callback) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", `/user/${id}`, true);
+        xhr.responseType = "json";
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            const user = xhr.response;
+            callback(user);
+          }
+        };
+        xhr.send();
+      }
+      function getUserByIdBridge() {
+        const id = this.dataset.id;
+        getUserById(id, function (user) {
+          document.getElementById("content").innerHTML = user.name;
+        });
+      }
+      for (let i = 0; i < lis.length; i++) {
+        lis[i].addEventListener("click", getUserByIdBridge);
+      }
+    </script>
+  </body>
+</html>
